@@ -14,8 +14,6 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
 
-# 1. Changed search to just 'Mamaearth' to get MORE results
-# 2. Increased range to 20 pages
 search_query = "mamaearth" 
 
 for i in range(1, 21):
@@ -28,8 +26,6 @@ for i in range(1, 21):
         # We look for the main container
         main_box = soup.find("div", class_="QSCKDh dLgFEE")
         
-        # If the main_box isn't found, we'll try to search the whole soup 
-        # just in case Flipkart changed the layout on that page
         items = main_box.find_all("div", class_="RGLWAk") if main_box else soup.find_all("div", class_="RGLWAk")
 
         if not items:
@@ -37,7 +33,7 @@ for i in range(1, 21):
             continue
 
         for card in items:
-            # Full Name logic
+            # Full Name 
             name_tag = card.find("a", class_="pIpigb")
             if name_tag:
                 full_name = name_tag.get('title')
@@ -66,8 +62,6 @@ for i in range(1, 21):
 
         print(f"Finished Page {i}. Total Items: {len(Product_Name)}")
         
-        # SLOW DOWN: This is the most important part. 
-        # If you go too fast, Flipkart stops sending data.
         time.sleep(3) 
 
     except Exception as e:
@@ -84,4 +78,5 @@ df = pd.DataFrame({
 })
 
 df.to_csv("Big_Mamaearth_Data.csv", index=False)
+
 print(f"Successfully saved {len(df)} rows to Big_Mamaearth_Data.csv")
